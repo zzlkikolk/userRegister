@@ -50,8 +50,7 @@ spring:
     #发送邮箱
     username: 577435092@qq.com
     #授权码
-    password: pkoknflhyjlsbdhg
-    #xwqdvtxdfobybfcg
+    password: 123
   #字段为空不返回
   jackson:
     default-property-inclusion: NON_EMPTY
