@@ -1,0 +1,73 @@
+#端口
+server:
+  port: 80
+
+#-----------Spring config START----------------------
+spring:
+  #应用名称
+  application:
+    name: user-server
+  #数据源
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/sys_user?useSSL=false&serverTimezone=UTC
+  #Spring data JPA
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        #字段驼峰命名
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    #控制台打印sql
+    show-sql: true
+    properties:
+      hibernate:
+        temp:
+          #使其不再在控制台打印 org.postgresql.jdbc.PgConnection.createClob() 方法尚未被实作。
+          use_jdbc_metadata_defaults: false
+  #Redis配置
+  redis:
+    port: 6379
+    host: 127.0.0.1
+    database: 0
+    jedis:
+      pool:
+        #最大连接数，负数为没有限制
+        max-active: 8
+        #阻塞超时等待时间 负数表示没有限制
+        max-wait: -1ms
+        #连接池最小空闲连接数
+        min-idle: 0
+        #连接池最大空闲连接数
+        max-idle: 8
+    timeout: 5000ms
+  #Spring mail 配置
+  mail:
+    #邮箱地址
+    host: smtp.qq.com
+    #发送邮箱
+    username: 577435092@qq.com
+    #授权码
+    password: pkoknflhyjlsbdhg
+    #xwqdvtxdfobybfcg
+  #字段为空不返回
+  jackson:
+    default-property-inclusion: NON_EMPTY
+#-----------Spring config END----------------------
+#jwt配置
+config:
+  jwt:
+    # 加密密钥
+    secret: abcdefg1234567
+    # token有效时长
+    expire: 3600
+#扫描controller中不需要鉴权的method
+controller:
+  scanPackage: classpath*:com/jerry/controller/*/*.class
+
+#正则匹配
+regex:
+  #邮箱正则匹配
+  mail: ^([a-zA-Z\d][\w-]{2,})@(\w{2,})\.([a-z]{2,})(\.[a-z]{2,})?$

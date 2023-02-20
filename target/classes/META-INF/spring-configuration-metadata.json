@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "config.jwt",
+      "type": "com.jerry.jwt.JwtUtil",
+      "sourceType": "com.jerry.jwt.JwtUtil"
+    }
+  ],
+  "properties": [
+    {
+      "name": "config.jwt.expire",
+      "type": "java.lang.Long",
+      "sourceType": "com.jerry.jwt.JwtUtil"
+    },
+    {
+      "name": "config.jwt.secret",
+      "type": "java.lang.String",
+      "sourceType": "com.jerry.jwt.JwtUtil"
+    }
+  ],
+  "hints": []
+}
