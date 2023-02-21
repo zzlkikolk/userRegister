@@ -48,9 +48,9 @@ spring:
     #邮箱地址
     host: smtp.qq.com
     #发送邮箱
-    username: 577435092@qq.com
+    username: 
     #授权码
-    password: pkoknflhyjlsbdhg
+    password: 
   #字段为空不返回
   jackson:
     default-property-inclusion: NON_EMPTY
