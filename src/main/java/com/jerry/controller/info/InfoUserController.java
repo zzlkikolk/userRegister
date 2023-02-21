@@ -95,7 +95,7 @@ public class InfoUserController {
     }
 
     /** 重置密码**/
-    @PutMapping("/reset")
+    @PostMapping("/reset")
     @RequiresAuthentication
     public Result<?> resetPassword(@RequestBody UserDto user){
         InfoUser infoUser= (InfoUser) SecurityUtils.getSubject().getPrincipal();
