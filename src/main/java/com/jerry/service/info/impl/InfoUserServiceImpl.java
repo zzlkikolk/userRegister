@@ -66,31 +66,48 @@ public class InfoUserServiceImpl implements InfoUserService {
         if(user!=null){
            String email_1=DesensitizedUtil.email(user.getUserEmail());//数据脱敏
            user.setUserEmail(email_1);
-            user.setUserPassword(null);
-            return user;
+           user.setUserPassword(null);
         }else{
-            String email_1=DesensitizedUtil.email(user.getUserEmail());//数据脱敏
-            user.setUserEmail(email_1);
-            user.setUserPassword(null);
-            return infoUserDao.findByUserEmail(email);
+            user=infoUserDao.findByUserEmail(email);
+            if(user!=null) {
+                String email_1 = DesensitizedUtil.email(user.getUserEmail());//数据脱敏
+                user.setUserEmail(email_1);
+                user.setUserPassword(null);
+            }
         }
+        return user;
     }
 
+    /**
+     * 新增用户
+     * @param userDto
+     * @return 成功/失败
+     */
+    @Transactional
     @Override
     public boolean saveUser(UserDto userDto) {
-        InfoUser queryUser=infoUserDao.findByUserEmail(userDto.getUserEmail());
-        if(Objects.isNull(queryUser)) {//新增时获取用户是否存在，存在返回FALSE
-            InfoUser infoUser = new InfoUser();
-            BeanUtils.copyProperties(userDto, infoUser);
-            infoUser.setUserHead("default.png");
-            infoUser.setCreateTime(LocalDateTime.now());
-            infoUser.setUpdateTime(LocalDateTime.now());
-            infoUser.setUnCheck(0);
-            InfoUser result=save(infoUser);
-            if(!Objects.isNull(result))
-                return true;
-            else
+        if(userDto.getUserEmail()!=null&&userDto.getUserPassword()!=null) {
+            InfoUser queryUser = infoUserDao.findByUserEmail(userDto.getUserEmail());
+            if (Objects.isNull(queryUser)) {//新增时获取用户是否存在，存在返回FALSE
+                String pass= AESUtil.encrypt(userDto.getUserPassword());
+                InfoUser infoUser = new InfoUser();
+                BeanUtils.copyProperties(userDto, infoUser);
+                if(userDto.getUserName()==null){
+                    infoUser.setUserName("注册用户");
+                }
+                infoUser.setUserPassword(pass);
+                infoUser.setUserHead("default.png");
+                infoUser.setCreateTime(LocalDateTime.now());
+                infoUser.setUpdateTime(LocalDateTime.now());
+                infoUser.setUnCheck(0);
+                InfoUser result = save(infoUser);
+                if (!Objects.isNull(result))
+                    return true;
+                else
+                    return false;
+            } else {
                 return false;
+            }
         }else {
             return false;
         }
@@ -99,8 +116,9 @@ public class InfoUserServiceImpl implements InfoUserService {
     /**
      * 更新用户信息
      * @param userDto
-     * @return 更新成功
+     * @return 成功/失败
      */
+    @Transactional
     @Override
     public boolean updateUser(UserDto userDto) {
         InfoUser queryUser=infoUserDao.findByUserEmail(userDto.getUserEmail());
@@ -120,12 +138,27 @@ public class InfoUserServiceImpl implements InfoUserService {
             if(StringUtils.isBlank(infoUser.getUserName())){
                 infoUser.setUserName(queryUser.getUserName());
             }
+            if(StringUtils.isBlank(infoUser.getUserName())){
+                infoUser.setUserName(queryUser.getUserName());
+            }if(StringUtils.isBlank(infoUser.getUserPassword())){
+                infoUser.setUserPassword(queryUser.getUserPassword());
+            }else {
+                String pass= AESUtil.encrypt(infoUser.getUserPassword());
+                infoUser.setUserPassword(pass);
+            }
             infoUser.setUpdateTime(LocalDateTime.now());
             InfoUser result=infoUserDao.save(infoUser);
-            if(!Objects.isNull(result))
+            if(!Objects.isNull(result)) {
+                /*
+                    更新成功后刷新缓存，删除当前缓存中的token
+                 */
+                redisTemplate.delete(infoUser.getUserEmail() + "_token");
+                redisTemplate.opsForValue().set(infoUser.getUserEmail() + "_info", result);
                 return true;
-            else
+            }
+            else {
                 return false;
+            }
         }else {
             return false;
         }

@@ -19,4 +19,5 @@ public interface InfoUserService extends BaseService<InfoUser> {
     boolean saveUser(UserDto userDto);
 
     boolean updateUser(UserDto userDto);
+
 }

@@ -46,6 +46,7 @@ public class InfoUserController {
     @Resource
     private RedisTemplate redisTemplate;
 
+    /** 用户信息**/
     @GetMapping("/userInfo/{email}")
     @RequiresAuthentication
     public Result<?> getUserInfo(@PathVariable("email") String email){
@@ -57,6 +58,19 @@ public class InfoUserController {
         }
     }
 
+    /** 当前用户信息**/
+    @GetMapping("/userInfo")
+    @RequiresAuthentication
+    public Result<?> getUserInfo(){
+      String uEmail= ( (InfoUser)SecurityUtils.getSubject().getPrincipal()).getUserEmail();
+        InfoUser user= infoUserService.getUser(uEmail);
+        if(user!=null){
+            return new Result<>().success().put(user);
+        }else {
+            return new Result<>().success("未找到");
+        }
+    }
+
     /** 用户注册**/
     @NoAuth
     @PostMapping("/register")
@@ -64,13 +78,13 @@ public class InfoUserController {
         if(!StringUtils.isEmpty(user)){
             String cacheCode= (String) redisTemplate.opsForValue().get(user.getUserEmail()+"_REGISTER"+"_code");
             if(cacheCode!=null&&cacheCode.equals(user.getEmailCode())){
-                String pass= AESUtil.encrypt(user.getUserPassword());
-                user.setUserPassword(pass);
+                //验证码验证通过后删除缓存
+                redisTemplate.delete(user.getUserEmail()+"_REGISTER"+"_code");
               boolean check=infoUserService.saveUser(user);
                 if(check){
                     return new Result<>().success(200,"注册成功");
                 }else {
-                    return new Result<>().error(400,"账号已存在");
+                    return new Result<>().error(400,"注册失败");
                 }
             }else {
                 return new Result<>().error(400,"请输入正确的验证码");
@@ -89,8 +103,8 @@ public class InfoUserController {
         if(!StringUtils.isEmpty(user.getUserPassword())){
             String cacheCode= (String) redisTemplate.opsForValue().get(user.getUserEmail()+"_RESET"+"_code");
             if(cacheCode!=null&&cacheCode.equals(user.getEmailCode())){
-                String pass= AESUtil.encrypt(user.getUserPassword());
-                user.setUserPassword(pass);
+                //验证码验证通过后删除缓存
+                redisTemplate.delete(user.getUserEmail()+"_RESET"+"_code");
                 boolean check=infoUserService.updateUser(user);
                 if(check){
                     return new Result<>().success(200,"修改成功");
