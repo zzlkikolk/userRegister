@@ -30,8 +30,6 @@ public class InfoUserServiceImpl implements InfoUserService {
 
 
 
-    private final static Logger log= LoggerFactory.getLogger(InfoUserServiceImpl.class);
-
     @Resource
     private InfoUserDao infoUserDao;
 
@@ -101,10 +99,11 @@ public class InfoUserServiceImpl implements InfoUserService {
                 infoUser.setUpdateTime(LocalDateTime.now());
                 infoUser.setUnCheck(0);
                 InfoUser result = save(infoUser);
-                if (!Objects.isNull(result))
+                if (!Objects.isNull(result)) {
                     return true;
-                else
+                } else {
                     return false;
+                }
             } else {
                 return false;
             }
