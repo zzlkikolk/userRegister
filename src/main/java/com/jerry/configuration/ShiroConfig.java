@@ -1,7 +1,6 @@
 package com.jerry.configuration;
 
-import com.jerry.jwt.JwtFilter;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import com.jerry.filter.JwtFilter;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SessionStorageEvaluator;
@@ -42,8 +41,8 @@ public class ShiroConfig {
      3、部分过滤器可指定参数，如perms，roles
      *
      */
-    @Bean
-    public ShiroFilterFactoryBean shirFilter(DefaultWebSecurityManager securityManager){
+    @Bean("shiroFilter")
+    public ShiroFilterFactoryBean shiroFilter(DefaultWebSecurityManager securityManager){
         ShiroFilterFactoryBean shiroFilterFactoryBean=new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         // 如果不设置默认会自动寻找Web工程根目录下的"/login"页面
@@ -51,7 +50,7 @@ public class ShiroConfig {
         // 登录成功后要跳转的链接
         shiroFilterFactoryBean.setSuccessUrl("/index");
         //未授权界面;
-        shiroFilterFactoryBean.setUnauthorizedUrl("/401");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/auth/401");
         //拦截器.
         Map<String,String> filterChainDefinitionMap = new LinkedHashMap<String,String>();
         //自定义拦截器

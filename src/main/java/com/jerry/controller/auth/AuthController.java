@@ -73,7 +73,7 @@ public class AuthController {
                 return new Result<>().error("登录失败，请检查账号密码");
             }
         }else {
-            return new Result<>().error("账号未注册");
+            return new Result<>().error(400,"账号未注册");
         }
     }
 

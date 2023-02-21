@@ -16,10 +16,13 @@ public class UserDto implements Serializable {
     private String userEmail;
 
     /** 用户密码**/
-    private String passWord;
+    private String userPassword;
 
     /** 邮箱验证码**/
     private String emailCode;
+
+    /** 验证码类型，注册验证码，重置密码验证码，注销验证码**/
+    private String codeType;
 
     public String getUserName() {
         return userName;
@@ -37,12 +40,12 @@ public class UserDto implements Serializable {
         this.userEmail = userEmail;
     }
 
-    public String getPassWord() {
-        return passWord;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
     public String getEmailCode() {
@@ -53,13 +56,22 @@ public class UserDto implements Serializable {
         this.emailCode = emailCode;
     }
 
+    public String getCodeType() {
+        return codeType;
+    }
+
+    public void setCodeType(String codeType) {
+        this.codeType = codeType;
+    }
+
     @Override
     public String toString() {
         return "UserDto{" +
                 "userName='" + userName + '\'' +
                 ", userEmail='" + userEmail + '\'' +
-                ", passWord='" + passWord + '\'' +
+                ", userPassword='" + userPassword + '\'' +
                 ", emailCode='" + emailCode + '\'' +
+                ", codeType='" + codeType + '\'' +
                 '}';
     }
 }

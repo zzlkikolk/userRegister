@@ -1,6 +1,7 @@
-package com.jerry.jwt;
+package com.jerry.filter;
 
 import com.jerry.base.Contact;
+import com.jerry.jwt.JwtToken;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
@@ -90,6 +91,11 @@ public class JwtFilter extends AuthenticatingFilter {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 验证失败token，跳转登录失效
+     * @param response
+     */
     private void unCheck(ServletResponse response){
         try {
             HttpServletResponse httpServletResponse = (HttpServletResponse) response;

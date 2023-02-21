@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -39,23 +40,32 @@ public class SendMailUtil {
      * @param email 收件人地址
      * @return
      */
-    public boolean sendCode(String email){
+    public boolean sendCode(String email,String type){
         String code=randomCode();
-        try {
-            log.info("发送验证码邮件中");
-            SimpleMailMessage mailMessage=new SimpleMailMessage();
-            mailMessage.setSubject("【测试验证码】验证消息");
-            mailMessage.setText("验证码为:"+code+",有效期5分钟,请勿泄露给他人");
-            mailMessage.setTo(email);
-            mailMessage.setFrom("577435092@qq.com");
-            sender.send(mailMessage);
-            redisTemplate.opsForValue().set(email+"_code",code);//加入Redis中
-            redisTemplate.expire(email+"_code",5, TimeUnit.MINUTES);//设置验证码过期时间5分钟
-            log.info("发送验证码成功");
-            return true;
-        } catch (MailException e) {
-            log.error("验证码邮件发送失败");
-            e.printStackTrace();
+        if(!Objects.isNull(type)) {
+            try {
+                log.info("发送验证码邮件中");
+                SimpleMailMessage mailMessage = new SimpleMailMessage();
+                mailMessage.setSubject("【测试验证码】验证消息");
+                mailMessage.setText("验证码为:" + code + ",有效期5分钟,请勿泄露给他人");
+                mailMessage.setTo(email);
+                mailMessage.setFrom("577435092@qq.com");
+                sender.send(mailMessage);
+                StringBuilder builder=new StringBuilder();
+                builder.append(email);
+                builder.append("_");
+                builder.append(type);
+                builder.append("_code");
+                redisTemplate.opsForValue().set(builder.toString(), code);//加入Redis中
+                redisTemplate.expire(builder.toString(), 5, TimeUnit.MINUTES);//设置验证码过期时间5分钟
+                log.info("发送验证码成功");
+                return true;
+            } catch (MailException e) {
+                log.error("验证码邮件发送失败");
+                e.printStackTrace();
+                return false;
+            }
+        }else {
             return false;
         }
     }
