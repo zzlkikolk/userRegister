@@ -128,16 +128,22 @@ public class InfoUserController {
     public Result<?> sendCode(@RequestBody UserDto user){
         if(user.getUserEmail()!=null) {
             boolean isEmail = regexUtil.checkEmail(user.getUserEmail());
-            if(isEmail&&!StringUtils.isEmpty(user.getCodeType())){//如果类型为空不发送验证码
+            if(isEmail&&!StringUtils.isEmpty(user.getCodeType())){//如果类型为空不发送验证码\
+                //查询用户是否已经发送过
+                String cacheCode=(String) redisTemplate.opsForValue().get(user.getUserEmail()+"_"+user.getCodeType()+"_code");
+                boolean havaCache=cacheCode==null?true:false;
                 boolean inType=Arrays.asList(Contact.TYPE).contains(user.getCodeType());//判断验证码类型
                 boolean sendSuccessfully=false;
-                if(inType) {
+                if(inType&&havaCache) {
                     sendSuccessfully = sendMailUtil.sendCode(user.getUserEmail(), user.getCodeType());//给用户发送验证码
+                }
+                if(!havaCache){
+                    return new Result<>().error("发送过于频繁");
                 }
                 if(sendSuccessfully){
                     return new Result<>().success();
                 }else{
-                    return new Result<>().error("发送失败，稍后再试");
+                    return new Result<>().error("发送失败");
                 }
             }else {
                 return new Result<>().error(400,"缺少参数");
