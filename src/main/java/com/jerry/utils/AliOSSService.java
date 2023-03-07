@@ -11,11 +11,6 @@ import java.io.File;
 import java.io.FileInputStream;
 
 public class AliOSSService {
-    private static final String END_POINT="https://oss-cn-shenzhen.aliyuncs.com";
-
-    private static final String ACCESS_KEY="LTAI5tLQczWJE3tMeH5uASKy";
-
-    private static final String ACCESS_KEY_SECRET="mdMzvL3HkebGWTTw5pV0DqdY35Nl9J";
 
 //    public static void main(String[] args) {
 //        // 填写Bucket名称，例如examplebucket。
