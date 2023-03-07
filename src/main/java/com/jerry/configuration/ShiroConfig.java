@@ -59,7 +59,7 @@ public class ShiroConfig {
         customisedFilter.put("perms", getJwtFilter());
         filterChainDefinitionMap.put("/auth/401", "anon");
         filterChainDefinitionMap.put("/auth/unCheck", "anon");
-        filterChainDefinitionMap.put("/500", "anon");
+        filterChainDefinitionMap.put("/favicon.ico", "anon");
         filterChainDefinitionMap.put("/auth/login", "anon");
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/config/**", "anon");

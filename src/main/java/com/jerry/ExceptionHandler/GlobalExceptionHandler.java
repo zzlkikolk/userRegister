@@ -29,5 +29,10 @@ public class GlobalExceptionHandler {
     public Result<?> messageNotRead(){
         return new Result<>().error(400,"消息体数据异常，请检查格式");
     }
+
+    @ExceptionHandler(ClassCastException.class)
+    public Result<?> classCastException(){
+        return new Result<>().error(500,"请联系管理员");
+    }
 }
 

@@ -51,6 +51,7 @@ public class InfoUser implements Serializable {
     @Column(name = "un_check")
     private Integer unCheck;
 
+
     public Integer getPkId() {
         return pkId;
     }

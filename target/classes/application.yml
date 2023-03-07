@@ -54,6 +54,17 @@ spring:
   #字段为空不返回
   jackson:
     default-property-inclusion: NON_EMPTY
+  #热部署
+  devtools:
+    restart:
+      additional-paths: src/main/java
+      enabled: true
+  #rabbitMq
+  rabbitmq:
+    addresses: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
 #-----------Spring config END----------------------
 #jwt配置
 config:

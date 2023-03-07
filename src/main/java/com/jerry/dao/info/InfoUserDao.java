@@ -18,4 +18,5 @@ public interface InfoUserDao extends JpaRepository<InfoUser, Serializable> {
      * @return
      */
     InfoUser findByUserEmail(String email);
+
 }

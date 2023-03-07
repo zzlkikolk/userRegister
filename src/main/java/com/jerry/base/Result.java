@@ -1,11 +1,14 @@
 package com.jerry.base;
 
+import java.io.Serializable;
+
 /**
  * 通用返回对象
  * @param <T>返回类型
  * @author zhangzhilin
  */
-public class Result<T> {
+public class Result<T> implements Serializable {
+    private static final long serialVersionUID = -5339905835789989772L;
     /**
      * 响应参数500(服务器错误)，200(响应成功)，
      */

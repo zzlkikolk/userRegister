@@ -10,7 +10,8 @@
     {
       "name": "config.jwt.expire",
       "type": "java.lang.Long",
-      "sourceType": "com.jerry.jwt.JwtUtil"
+      "sourceType": "com.jerry.jwt.JwtUtil",
+      "defaultValue": 0
     },
     {
       "name": "config.jwt.secret",

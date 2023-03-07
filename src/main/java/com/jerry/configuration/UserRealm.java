@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,7 +45,7 @@ public class UserRealm extends AuthorizingRealm {
     /**
      * 授权（认证通过后给用户授权)
      * @param principalCollection
-     * @return
+     * @return 
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
@@ -67,7 +68,7 @@ public class UserRealm extends AuthorizingRealm {
      * 步骤
      *  1.先从redis中获取用户token
      *  2.先判断token是否一致
-     *  3.一致则通过，若Redis中无数据，则先判断合法性，再添加到Redis中（在token header中携带版本号）
+     *  3.一致则通过，若Redis中无数据，则先判断合法性，再添加到Redis中
      * @param authenticationToken
      * @return
      */
